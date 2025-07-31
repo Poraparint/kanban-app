@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model User {
+  id       String  @id @default(cuid())
+  email    String  @unique
+  username String  @unique
+  password String
+
+  boards        Board[]
+  tasks         Task[]
+  notifications Notification[]
+
+  @@map("users")
+}
+
+model Board {
+  id      String @id @default(cuid())
+  title   String
+  ownerId String
+
+  owner   User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  columns Column[]
+
+  @@map("boards")
+}
+
+model Column {
+  id       String @id @default(cuid())
+  title    String
+  position Int
+  boardId  String
+
+  board Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  tasks Task[]
+
+  @@unique([boardId, position])
+  @@map("columns")
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  columnId    String
+  userId      String
+
+  tags Tag? @relation("TaskTags")
+
+  column Column @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("tasks")
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String
+  color     String
+  message   String
+  createdAt DateTime @default(now())
+
+  task Task @relation("TaskTags", fields: [id], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  message   String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
