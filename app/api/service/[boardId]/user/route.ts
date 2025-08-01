@@ -6,6 +6,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ boardId: string }> }
 ) {
+  const { boardId } = await params;
   const user = await currentUser();
 
   if (!user) {
@@ -16,8 +17,6 @@ export async function GET(
       { status: 403 }
     );
   }
-
-  const { boardId } = await params;
 
   if (!boardId) {
     return NextResponse.json(
@@ -45,7 +44,6 @@ export async function GET(
       if (user.length < 1) {
           return NextResponse.json({
             error: "User not found",
-            description: "Contact Prim",
           });
       }
 
