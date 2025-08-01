@@ -7,6 +7,7 @@ export async function GET(
   { params }: { params: Promise<{ boardId: string }> }
 ) {
   const { boardId } = await params;
+  
   const user = await currentUser();
 
   if (!user) {
