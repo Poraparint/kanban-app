@@ -1,6 +1,6 @@
-# โครงการ Kanban Board
+# 📌 โครงการ Kanban Board
 
-โปรเจคนี้เป็นการทำข้อสอบ (Take-home assignment) โดยมีการพัฒนาโปรแกรมระบบ Kanban Board พื้นฐาน
+โปรเจคนี้เป็นการทำข้อสอบ (Take-home assignment) โดยพัฒนาโปรแกรมระบบ **Kanban Board** พื้นฐาน
 
 ---
 
@@ -19,14 +19,6 @@
 ```bash
 git clone <repo-url>
 cd <project-folder>
-
-
-### 2. ติดตั้ง Dependencies
-
-Tnpm install
-# หรือ
-yarn install
-
 2. ติดตั้ง Dependencies
 bash
 คัดลอก
@@ -120,25 +112,3 @@ Optional Topics
 
 การกำหนดผู้รับผิดชอบงาน (Task Assignee)
 
-📂 โครงสร้างโปรเจค (โดยสรุป)
-css
-คัดลอก
-แก้ไข
-app/
-  board/[boardId]/
-    column/
-      task/
-        form.tsx
-        task-list.tsx
-    invite/
-      dialog.tsx
-  api/
-    user/
-      email/route.ts
-    service/[boardId]/user/route.ts
-components/
-  shared/
-  ui/
-context/
-lib/
-prisma/
