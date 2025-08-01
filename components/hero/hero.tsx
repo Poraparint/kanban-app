@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/user/use-user";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export const HeroSection = () => {
   const user = useCurrentUser();
@@ -14,7 +15,7 @@ export const HeroSection = () => {
       <div className="flex gap-3">
         {user ? (
           <Button>
-            <Link href="/auth/register">Access To Board</Link>
+            <Link href={`${DEFAULT_LOGIN_REDIRECT}`}>Access To Board</Link>
           </Button>
         ) : (
           <>
