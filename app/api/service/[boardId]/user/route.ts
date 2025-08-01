@@ -1,35 +1,25 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function GET(
-  request: NextRequest,
+  request: Request,
   { params }: { params: { boardId: string } }
 ) {
-  const boardId =  params.boardId;
-  
+  const { boardId } = params;
+
   const user = await currentUser();
 
   if (!user) {
-    return NextResponse.json(
-      {
-        error: "Not Authorized",
-      },
-      { status: 403 }
-    );
+    return NextResponse.json({ error: "Not Authorized" }, { status: 403 });
   }
 
   if (!boardId) {
-    return NextResponse.json(
-      {
-        error: "Missing board",
-      },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Missing board ID" }, { status: 400 });
   }
 
   try {
-    const user = await db.boardMember.findMany({
+    const boardMembers = await db.boardMember.findMany({
       where: { boardId },
       select: {
         id: true,
@@ -42,15 +32,16 @@ export async function GET(
       },
     });
 
-    if (user.length < 1) {
-      return NextResponse.json({
-        error: "User not found",
-      });
+    if (!boardMembers.length) {
+      return NextResponse.json({ error: "No members found" }, { status: 404 });
     }
 
-    return NextResponse.json(user);
+    return NextResponse.json(boardMembers);
   } catch (error) {
-    console.error("[SCHEDULE_CATEGORY_GET]", error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    console.error("[BOARD_MEMBERS_GET]", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
