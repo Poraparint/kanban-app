@@ -55,13 +55,11 @@ model BoardMember {
 model Column {
   id       String @id @default(cuid())
   title    String
-  position Int
   boardId  String
 
   board Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
   tasks Task[]
 
-  @@unique([boardId, position])
   @@map("columns")
 }
 
@@ -69,6 +67,7 @@ model Task {
   id          String   @id @default(cuid())
   title       String
   description String?
+  position Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   columnId    String

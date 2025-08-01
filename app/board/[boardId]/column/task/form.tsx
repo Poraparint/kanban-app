@@ -15,6 +15,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 
 import { CreateTaskSchema } from "@/schemas";
@@ -22,12 +29,20 @@ import { CreateTaskSchema } from "@/schemas";
 import { SubmitButton } from "@/components/shared";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { createTaskActions } from "@/app/actions/task";
+import { useMemberByBoardId } from "@/hooks/board/use-member";
 
 interface CreateTaskFormProps {
   setOpen: (open: boolean) => void;
+  columnId: string;
+  boardId: string;
 }
 
-export const CreateTaskForm = ({ setOpen }: CreateTaskFormProps) => {
+export const CreateTaskForm = ({
+  setOpen,
+  columnId,
+  boardId,
+}: CreateTaskFormProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -36,13 +51,17 @@ export const CreateTaskForm = ({ setOpen }: CreateTaskFormProps) => {
     defaultValues: {
       title: "",
       description: "",
-      userId: ""
+      userId: "",
+      columnId,
     },
   });
 
+  const { member: members, isLoading: membersLoading } =
+    useMemberByBoardId(boardId);
+
   const OnSubmit = (values: z.infer<typeof CreateTaskSchema>) => {
     startTransition(() => {
-      createTaskAction(values, columnId)
+      createTaskActions( {...values}, columnId )
         .then((data) => {
           if (data?.error) {
             toast.error(data.error);
@@ -91,6 +110,39 @@ export const CreateTaskForm = ({ setOpen }: CreateTaskFormProps) => {
                       disabled={isPending}
                       placeholder="Your Task Description"
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="userId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Assignee</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      disabled={membersLoading || isPending}
+                    >
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={
+                            membersLoading ? "Loading..." : "Select member"
+                          }
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {members.map((m) => (
+                          <SelectItem key={m.user.id} value={m.user.id}>
+                            {m.user.username}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

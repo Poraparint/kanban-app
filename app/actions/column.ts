@@ -26,22 +26,12 @@ export const createColumnAction = async (
   }
 
   try {
-    const lastColumn = await db.column.findFirst({
-      where: {
-        boardId,
-      },
-      orderBy: {
-        position: "desc",
-      },
-    });
-
-    const newPosition = lastColumn ? lastColumn.position + 1 : 1;
       
     await db.column.create({
       data: {
         title: validatedData.data.title,
         boardId,
-        position: newPosition,
+        
       },
     });
 

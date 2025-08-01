@@ -1,11 +1,16 @@
 "use client";
 
 import { DialogButton } from "@/components/shared";
-import { CreateColumnForm } from "@/app/board/[boardId]/components/form";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
+import { CreateTaskForm } from "@/app/board/[boardId]/column/task/form";
 
-export const DialogCreateTask = () => {
+interface DialogCreateTaskProps {
+  boardId: string;
+  columnId: string;
+}
+
+export const DialogCreateTask = ({ boardId, columnId }: DialogCreateTaskProps) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -20,7 +25,11 @@ export const DialogCreateTask = () => {
         open={open}
         setOpen={setOpen}
       >
-        <CreateColumnForm setOpen={setOpen} />
+        <CreateTaskForm
+          setOpen={setOpen}
+          columnId={columnId}
+          boardId={boardId}
+        />
       </DialogButton>
     </>
   );
