@@ -4,9 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { boardId: string } }
+  { params }: { params: Promise<{ boardId: string }> }
 ) {
-  const { boardId } = params;
+  const { boardId } = await params;
   
   const user = await currentUser();
 
@@ -42,16 +42,15 @@ export async function GET(
       },
     });
 
-      if (user.length < 1) {
-          return NextResponse.json({
-            error: "User not found",
-          });
-      }
+    if (user.length < 1) {
+      return NextResponse.json({
+        error: "User not found",
+      });
+    }
 
-    return NextResponse.json(
-      user
-    );
-  } catch {
+    return NextResponse.json(user);
+  } catch (error) {
+    console.error("[SCHEDULE_CATEGORY_GET]", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
