@@ -1,12 +1,12 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  request: Request,
-  { params }: { params: { boardId: string } }
+  request: NextRequest,
+  context: { params: { boardId: string } }
 ) {
-  const { boardId } = params;
+  const { boardId } = context.params;
 
   const user = await currentUser();
 
