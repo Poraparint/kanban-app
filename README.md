@@ -23,6 +23,7 @@ cd <project-folder>
 bash
 คัดลอก
 แก้ไข
+```
 npm install
 # หรือ
 yarn install
