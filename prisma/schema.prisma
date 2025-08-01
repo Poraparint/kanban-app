@@ -23,6 +23,7 @@ model User {
   boards        Board[]
   tasks         Task[]
   notifications Notification[]
+  boardMembers BoardMember[]
 
   @@map("users")
 }
@@ -34,8 +35,21 @@ model Board {
 
   owner   User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   columns Column[]
+  members BoardMember[]
 
   @@map("boards")
+}
+
+model BoardMember {
+  id      String @id @default(cuid())
+  boardId String
+  userId  String
+
+  board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([boardId, userId])
+  @@map("board_members")
 }
 
 model Column {
