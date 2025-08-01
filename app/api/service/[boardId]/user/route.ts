@@ -4,9 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ boardId: string }> }
+  { params }: { params: { boardId: string } }
 ) {
-  const { boardId } = await params;
+  const { boardId } = params;
   
   const user = await currentUser();
 
