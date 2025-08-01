@@ -37,7 +37,7 @@ export const MemberBoardList = async () => {
 
     return (
         <div className="space-y-2">
-            Board that u has invited
+            Board that u had invited
         {boards.map((board) => (
           <div key={board.boardId} className="p-4 border rounded-md">
             <h2 className="text-xl font-semibold">{board.board.title}</h2>
