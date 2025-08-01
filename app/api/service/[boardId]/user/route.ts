@@ -14,10 +14,6 @@ export async function GET(
     return NextResponse.json({ error: "Not Authorized" }, { status: 403 });
   }
 
-  if (!boardId) {
-    return NextResponse.json({ error: "Missing board ID" }, { status: 400 });
-  }
-
   try {
     const boardMembers = await db.boardMember.findMany({
       where: { boardId },
