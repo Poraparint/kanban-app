@@ -7,7 +7,11 @@ import { CardNotFound } from "@/components/shared";
 import { validateUser } from "@/lib/validation";
 import { db } from "@/lib/db";
 
-const BoardManagePage = async ({ params }: { params: { boardId: string } }) => {
+type params = {
+  params: Promise<{ boardId: string }>;
+};
+
+export default async function BoardManagePage ({params}: params)  {
   const { boardId } = await params;
 
   const validation = await validateUser(boardId);
@@ -48,5 +52,3 @@ const BoardManagePage = async ({ params }: { params: { boardId: string } }) => {
     </BoardProvider>
   );
 };
-
-export default BoardManagePage;

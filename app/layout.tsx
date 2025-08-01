@@ -4,6 +4,8 @@ import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
 import { Navbar } from "@/components/layout/navbar";
+import { Loading } from "@/components/shared";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,11 +33,19 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <Navbar/>
-          <div className="p-2">
-            <Toaster />
-            {children}
-          </div>
+          <Suspense
+            fallback={
+              <div className="flex justify-center items-center h-screen w-screen">
+                <Loading />
+              </div>
+            }
+          >
+            <Navbar />
+            <div className="p-2">
+              <Toaster />
+              {children}
+            </div>
+          </Suspense>
         </body>
       </html>
     </SessionProvider>
