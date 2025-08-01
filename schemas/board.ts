@@ -9,7 +9,8 @@ export const InviteMemberSchema = z.object({
 });
 
 export const CreateTaskSchema = z.object({
-    title: z.string().min(1, "Title is required"),
-    description: z.string().optional(),
-    userId: z.string().optional(),
+  title: z.string().min(1, "Title is required"),
+  description: z.string().optional(),
+  userId: z.string().min(1, "userId is required"),
+  columnId: z.string().min(1, "colunId is required"),
 });
