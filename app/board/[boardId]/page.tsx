@@ -29,15 +29,6 @@ const BoardManagePage = async ({ params }: { params: { boardId: string } }) => {
     },
   });
 
-  if (users.length === 0) {
-    return (
-      <CardNotFound
-        message="Member not found"
-        description="Get started by inviting member"
-      />
-    );
-  }
-
   return (
     <BoardProvider boardId={boardId}>
       <Card className="mb-4 flex-row justify-between">
